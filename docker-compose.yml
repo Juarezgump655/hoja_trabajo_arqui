@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  # service postgresql
+  postgres-sql:
+    # image:tag
+    # por defecto se utiliza el tag latest
+    image: postgres:16
+    restart: always
+    ports:
+      # local_machine_port:container_port
+      # el primer puerto es de la maquina local y el segundo puerto despues de los dos puntos es en donde esta el contenedor
+      # es decir con mi puerto local accedo al puerto en donde esta levantado el contenedor
+      - "5433:5432"
+    environment:
+      # ENV_NAME:ENV_VALUE
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=juarezgump
+      - POSTGRES_PASSWORD=desa123
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - db-data:/var/lib/postgresql/data/pgdata
+
+  node-application:
+    build: .
+    container_name: node-application
+    ports:
+      - "9000:3000"
+    restart: always
+
+volumes:
+  db-data:
+    driver: local
